@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<modification
+		xmlns="https://github.com/vqmod/vqmod"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="https://github.com/vqmod/vqmod https://raw.githubusercontent.com/vqmod/vqmod/master/vqmod.xsd"
+		>
+			<id><![CDATA[[VQMOD] Journal 2 - Advanced Opencart Theme: Blog > Display featured image in blog post]]></id>
+			<version>0.1.0</version>
+			<vqmver>2.6.6</vqmver>
+			<author>kanenas.net (aka Nikolas Branis) - nbran@kanenas.net</author>
+			<file path="catalog/controller/journal2/" name="blog.php" error="log">
+				<operation error="skip">
+					<search position="after"><![CDATA[$this->data['post_id'] = $post_info['post_id'];]]></search>
+					<add><![CDATA[
+            // kanenas: knns_journal2_blog_display_featured_image_in_blog_post.xml (start) <<
+            $image_width  = $this->journal2->settings->get('config_blog_settings.posts_image_width', 400);
+            $image_height = $this->journal2->settings->get('config_blog_settings.posts_image_height', 400);
+            $image_type   = $this->journal2->settings->get('config_blog_settings.posts_image_type', 'fit');
+            $this->data['featured_image'] = Journal2Utils::resizeImage($this->model_tool_image, $post_info['image'], $image_width, $image_height, $image_type, 'crop');
+            // kanenas: knns_journal2_blog_display_featured_image_in_blog_post.xml (end) <<
+					]]>
+					</add>
+				</operation>
+			</file>
+			<file path="catalog/view/theme/journal2/template/journal2/blog/" name="post.tpl" error="log">
+				<operation error="skip">
+					<search position="after"><![CDATA[<h1 class="heading-title"><?php echo $heading_title; ?></h1><?php echo $content_top; ?>]]></search>
+					<add><![CDATA[
+    <?php // kanenas: knns_journal2_blog_display_featured_image_in_blog_post.xml (start) << ?>
+    <?php if ($featured_image): ?>
+      <img src="<?php echo $featured_image; ?>" alt="<?php echo $heading_title; ?>" title="<?php echo $heading_title; ?>" />
+    <?php endif; ?>
+    <?php // kanenas: knns_journal2_blog_display_featured_image_in_blog_post.xml (end) << ?>
+					]]>
+					</add>
+				</operation>
+			</file>
+	</modification>
